@@ -12,5 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f1b6cd5fc4dafc4bb8d71fa8a31408f, type: 3}
   m_Name: Cildren
   m_EditorClassIdentifier: 
-  minDelay: 10
-  maxDelay: 15
+  initialMinDelay: 10
+  initialMaxDelay: 15
+  restartMinDelay: 5
+  restartMaxDelay: 10
+  repeatWhileActive: 1
+  useRandomTick: 0
+  tickInterval: 1
+  tickMinInterval: 0.8
+  tickMaxInterval: 1.2

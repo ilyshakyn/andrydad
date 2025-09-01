@@ -4,10 +4,12 @@ using UnityEngine;
 namespace Assets.angryDad.Scripts.Trigers.SpawnTrigers
 {
     [CreateAssetMenu(menuName = "Spawner/Strategies/Timed")]
-    public class TimedSpawnStrategy : SpawnStrategyBase
+    public class TimedSpawnStrategy : SpawnStrategyBase, ISpawnControllable
     {
         public float minDelay;
         public float maxDelay;
+        private bool isSpawning = true;
+
         TimerLogic intervalLogic = new TimerLogic();
 
         public override void Setup(ISpawnPoint point)
@@ -25,5 +27,7 @@ namespace Assets.angryDad.Scripts.Trigers.SpawnTrigers
                 point.Spawn();
             }
         }
+        public void PauseSpawning() => isSpawning = false;
+        public void ResumeSpawning() => isSpawning = true;
     }
 }

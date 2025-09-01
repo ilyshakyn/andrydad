@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Hero
+  - PlayGround
+  - PlayerHouse
   layers:
   - Default
   - TransparentFX

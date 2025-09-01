@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.angryDad.Scripts.Systems;
+using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
@@ -24,7 +25,7 @@ public class InputMovePlayer : MonoBehaviour
      public bool b_Input;
      public bool lKM_Input;
      public bool f_input;
-
+     private bool wasAttacking = false;
     private void Awake()
     {
         playerAnimator = GetComponent<PlayerAnimator>();
@@ -84,14 +85,21 @@ public class InputMovePlayer : MonoBehaviour
 
     private void HandleAttakeInput() 
     {
-      
         if (lKM_Input)
         {
-            playerLocomotion.isAttake = true;
+            if (!wasAttacking)
+            {
+                playerLocomotion.isAttake = true;
+                wasAttacking = true;
+            }
         }
         else
         {
-            playerLocomotion.isAttake = false;
+            if (wasAttacking)
+            {
+                playerLocomotion.isAttake = false;
+                wasAttacking = false;
+            }
         }
 
         playerAnimator.Attake(playerLocomotion.isAttake);

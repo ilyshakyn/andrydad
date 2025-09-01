@@ -8,8 +8,8 @@ namespace Assets.angryDad.Scripts.Trigers.LogicTrigers
     {
         public static TriggerTimerManager Instance { get; private set; }
 
-        private TriggerTimerController _controller;
-        private TriggerRestartEventBus _eventBus;
+        public TriggerTimerController _controller;
+        public TriggerRestartEventBus _eventBus;
         private bool _initialized = false;
 
         private void Awake()
@@ -25,8 +25,12 @@ namespace Assets.angryDad.Scripts.Trigers.LogicTrigers
             _controller = new TriggerTimerController(this);
             _eventBus = new TriggerRestartEventBus();
             _eventBus.OnRestartRequested += _controller.RestartWithDelay;
-
             _initialized = true;
+
+            foreach (var trigger in TriggerTimerRegistry.RegisteredTargets)
+            {
+                RegisterNewTrigger(trigger);
+            }
         }
 
         public void RegisterNewTrigger(ITriggerTimerTarget newTarget)

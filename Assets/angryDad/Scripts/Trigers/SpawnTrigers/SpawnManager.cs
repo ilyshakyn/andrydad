@@ -16,5 +16,17 @@ namespace Assets.angryDad.Scripts.Trigers.SpawnTrigers
                 group.Init();
             }
         }
+
+        public void PauseAllSpawns()
+        {
+            foreach (var group in groups)
+                group.Pause();
+        }
+
+        public void ResumeAllSpawns()
+        {
+            foreach (var group in groups)
+                group.Resume();
+        }
     }
 }

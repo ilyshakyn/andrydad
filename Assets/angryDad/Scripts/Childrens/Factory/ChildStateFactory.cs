@@ -9,6 +9,7 @@ namespace Assets.angryDad.Scripts.Childrens.Factory
 {
     public static  class ChildStateFactory
     {
+
         public static IChildState CreateState(ChildStateType type, ChildContext context)
         {
             return type switch

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/angryDad/Scenes/Level0.unity
+    path: Assets/angryDad/Scenes/Loading/Boot.unity
+    guid: 83c2ff5f7a8625b4880d1d77c6d07a8e
+  - enabled: 1
+    path: Assets/angryDad/Scenes/Level0/Level0.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects: {}

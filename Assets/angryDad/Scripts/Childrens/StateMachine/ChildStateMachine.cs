@@ -7,6 +7,7 @@ namespace Assets.angryDad.Scripts.Childrens.StateMachine
     {
 
         private IChildState currentState;
+        public IChildState CurrentState => currentState;
 
         public void ChangeState(IChildState newState)
         {

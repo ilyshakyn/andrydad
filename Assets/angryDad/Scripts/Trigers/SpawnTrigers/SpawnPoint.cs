@@ -5,6 +5,10 @@ namespace Assets.angryDad.Scripts.Trigers.SpawnTrigers
 {
     public class SpawnPoint : MonoBehaviour, ISpawnPoint
     {
+
+        private bool isConfigured = false;
+
+
         [SerializeField] private SpawnType type;
         public SpawnType Type => type;
         public Transform GetTransform() => transform;
@@ -14,6 +18,9 @@ namespace Assets.angryDad.Scripts.Trigers.SpawnTrigers
 
         public void Configure(GameObject prefab, SpawnStrategyBase strategy)
         {
+
+            if (isConfigured) return;
+
             this.prefab = prefab;
             this.strategy = strategy;
             strategy.Setup(this);

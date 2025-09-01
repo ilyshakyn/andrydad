@@ -13,78 +13,141 @@ public class TriggerTimerController
 
 
     private readonly MonoBehaviour _context;
-    private readonly float _defaultMinDelay = 3f;
-    private readonly float _defaultMaxDelay = 6f;
 
-    private readonly Dictionary<ITriggerTimerTarget, Coroutine> _coroutines = new();
+    private readonly Dictionary<ITriggerTimerTarget, Coroutine> _restartCoroutines = new();
+    private readonly Dictionary<ITriggerTimerTarget, Coroutine> _tickCoroutines = new();
 
-    public TriggerTimerController(MonoBehaviour context)
-    {
-        _context = context;
-    }
+    public TriggerTimerController(MonoBehaviour context) => _context = context;
 
     public void Register(ITriggerTimerTarget target)
     {
-        if (_coroutines.ContainsKey(target)) return;
-
-        Coroutine c = _context.StartCoroutine(TriggerLoop(target));
-        _coroutines[target] = c;
+        if (_restartCoroutines.ContainsKey(target)) return;
+        // первичный запуск после initial delay
+        var c = _context.StartCoroutine(InitialStart(target));
+        _restartCoroutines[target] = c;
     }
 
     public void RestartWithDelay(ITriggerTimerTarget target)
     {
-        if (_coroutines.TryGetValue(target, out Coroutine existing))
-        {
-            _context.StopCoroutine(existing);
-        }
-
-        Coroutine c = _context.StartCoroutine(WaitAndRestart(target));
-        _coroutines[target] = c;
+        StopTick(target);
+        StopRestart(target);
+        var c = _context.StartCoroutine(RestartAfterOff(target));
+        _restartCoroutines[target] = c;
     }
 
-    private IEnumerator WaitAndRestart(ITriggerTimerTarget target)
+    public void Unregister(ITriggerTimerTarget target)
     {
-        float delay = GetDelayFromTarget(target);
-        yield return new WaitForSeconds(delay);
-
-        target.TurnOn();
-        if (target.IsActive)
-            target.Trigger();
-
-        Coroutine loop = _context.StartCoroutine(TriggerLoop(target));
-        _coroutines[target] = loop;
+        StopTick(target);
+        StopRestart(target);
     }
 
-    private IEnumerator TriggerLoop(ITriggerTimerTarget target)
-    {
-        while (true)
-        {
-            float delay = GetDelayFromTarget(target);
-            yield return new WaitForSeconds(delay);
-
-            target.TurnOn();
-            if (target.IsActive)
-                target.Trigger();
-        }
-    }
-
-    private float GetDelayFromTarget(ITriggerTimerTarget target)
-    {
-        if (target is ITriggerTimerConfigurable configurable)
-        {
-            var settings = configurable.GetTriggerSettings();
-            return Random.Range(settings.minDelay, settings.maxDelay);
-        }
-        return Random.Range(_defaultMinDelay, _defaultMaxDelay);
-    }
-
-    public bool IsRegistered(ITriggerTimerTarget target) => _coroutines.ContainsKey(target);
+    public bool IsRegistered(ITriggerTimerTarget target) =>
+        _restartCoroutines.ContainsKey(target) || _tickCoroutines.ContainsKey(target);
 
     public void StopAll()
     {
-        foreach (var c in _coroutines.Values)
-            _context.StopCoroutine(c);
+        foreach (var c in _tickCoroutines.Values) _context.StopCoroutine(c);
+        foreach (var c in _restartCoroutines.Values) _context.StopCoroutine(c);
+        _tickCoroutines.Clear();
+        _restartCoroutines.Clear();
+    }
 
-        _coroutines.Clear();
+    // ---- internals ----
+    private IEnumerator InitialStart(ITriggerTimerTarget target)
+    {
+        var (min, max) = GetInitialDelay(target);
+        if (max > 0f) yield return new WaitForSeconds(UnityEngine.Random.Range(min, max));
+
+        target.TurnOn();
+        StartTick(target);
+        _restartCoroutines.Remove(target);
+    }
+
+    private IEnumerator RestartAfterOff(ITriggerTimerTarget target)
+    {
+        var (min, max) = GetRestartDelay(target);
+        yield return new WaitForSeconds(UnityEngine.Random.Range(min, max));
+
+        target.TurnOn();
+        StartTick(target);
+        _restartCoroutines.Remove(target);
+    }
+
+    private void StartTick(ITriggerTimerTarget target)
+    {
+        // Если цель уже выключена — не стартуем
+        if (!target.IsActive) return;
+
+        if (_tickCoroutines.ContainsKey(target)) return;
+        var c = _context.StartCoroutine(TickLoop(target));
+        _tickCoroutines[target] = c;
+    }
+
+    private void StopTick(ITriggerTimerTarget target)
+    {
+        if (_tickCoroutines.TryGetValue(target, out var c))
+        {
+            _context.StopCoroutine(c);
+            _tickCoroutines.Remove(target);
+        }
+    }
+
+    private void StopRestart(ITriggerTimerTarget target)
+    {
+        if (_restartCoroutines.TryGetValue(target, out var c))
+        {
+            _context.StopCoroutine(c);
+            _restartCoroutines.Remove(target);
+        }
+    }
+
+    private IEnumerator TickLoop(ITriggerTimerTarget target)
+    {
+        // Берём настройки
+        var settings = (target as ITriggerTimerConfigurable)?.GetTriggerSettings();
+
+        // Если повторение выключено — один раз триггерим и выходим
+        if (settings == null || !settings.repeatWhileActive)
+        {
+            if (target.IsActive) target.Trigger();
+            yield break;
+        }
+
+        while (target.IsActive)
+        {
+            target.Trigger();
+
+            float wait = settings.useRandomTick
+                ? UnityEngine.Random.Range(settings.tickMinInterval, settings.tickMaxInterval)
+                : settings.tickInterval;
+
+            // защитимся от невалидных значений
+            if (wait < 0.01f) wait = 0.01f;
+
+            yield return new WaitForSeconds(wait);
+        }
+
+        // Вышли из цикла — значит триггер выключили. Ждём Restart через EventBus.
+        _tickCoroutines.Remove(target);
+    }
+
+    private (float min, float max) GetInitialDelay(ITriggerTimerTarget target)
+    {
+        if (target is ITriggerTimerConfigurable c && c.GetTriggerSettings() != null)
+        {
+            var s = c.GetTriggerSettings();
+            return (s.initialMinDelay, s.initialMaxDelay);
+        }
+        return (0f, 0f);
+    }
+
+    private (float min, float max) GetRestartDelay(ITriggerTimerTarget target)
+    {
+        if (target is ITriggerTimerConfigurable c && c.GetTriggerSettings() != null)
+        {
+            var s = c.GetTriggerSettings();
+            return (s.restartMinDelay, s.restartMaxDelay);
+        }
+        return (3f, 6f); // дефолт
     }
 }

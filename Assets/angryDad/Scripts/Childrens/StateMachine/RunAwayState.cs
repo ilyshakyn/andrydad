@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Assets.angryDad.Scripts.Systems;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,19 +11,34 @@ namespace Assets.angryDad.Scripts.Childrens.StateMachine
 {
     public class RunAwayState : IChildState
     {
-        private readonly ChildContext _context;
-        private Vector3 _escapeTarget;
+        private readonly ChildContext context;
+        private Vector3 escapeTarget;
+        private bool hasTriggeredReturn = false;
 
         public RunAwayState(ChildContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         public void Enter()
         {
-            _context.Animator.PlayRunAwayAnimation();
-            _escapeTarget = _context.Controller.transform.position + (_context.Controller.transform.position - _context.Hero.position).normalized * 10f;
-            _context.Mover.MoveTo(_escapeTarget);
+            context.Animator.PlayRunAwayAnimation();
+
+            escapeTarget = context.Controller.transform.position +
+                (context.Controller.transform.position - context.Hero.position).normalized * 10f;
+
+            context.Mover.MoveTo(escapeTarget);
+            context.Controller.StartCoroutine(ReturnAfterDelay(5f));
+        }
+
+        private IEnumerator ReturnAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            if (!hasTriggeredReturn)
+            {
+                GameEvents.TriggerReturnToHome(context.Controller);
+                hasTriggeredReturn = true;
+            }
         }
 
         public void Update() { }
