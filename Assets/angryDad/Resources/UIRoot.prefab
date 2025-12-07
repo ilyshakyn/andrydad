@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 7185185171655561509}
-  uiScreenContainer: {fileID: 0}
+  uiScreenContainer: {fileID: 1884533028325385089}
 --- !u!1 &3592199486534950036
 GameObject:
   m_ObjectHideFlags: 0

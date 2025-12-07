@@ -21,11 +21,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BackA:
-        m_Texture: {fileID: 2800000, guid: 87bee338d047997489ce40bc10f18466, type: 3}
+        m_Texture: {fileID: 2800000, guid: fd76a3d85fa584e42834036916a79b6b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BackB:
-        m_Texture: {fileID: 2800000, guid: da973bcda49f771409235bfe5c155ce0, type: 3}
+        m_Texture: {fileID: 2800000, guid: 87bee338d047997489ce40bc10f18466, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BackTex:
@@ -49,11 +49,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DownA:
-        m_Texture: {fileID: 2800000, guid: 1fe26ef1655e3424b8a9a77e4ef0523d, type: 3}
+        m_Texture: {fileID: 2800000, guid: b064041c87bd8fb4ba2c21aa4863127e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DownB:
-        m_Texture: {fileID: 2800000, guid: c78764efdf38d934da9064e52fdd1357, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1fe26ef1655e3424b8a9a77e4ef0523d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DownTex:
@@ -65,11 +65,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FrontA:
-        m_Texture: {fileID: 2800000, guid: 1333dafd22b43974091d9c55f2169cde, type: 3}
+        m_Texture: {fileID: 2800000, guid: dffdb4378818bc5469033648c57bd0b1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FrontB:
-        m_Texture: {fileID: 2800000, guid: 6c2f5f53cf8256c42b90da9a536584c5, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1333dafd22b43974091d9c55f2169cde, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FrontTex:
@@ -77,11 +77,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LeftA:
-        m_Texture: {fileID: 2800000, guid: 90494e0797812be488f2fbe703461966, type: 3}
+        m_Texture: {fileID: 2800000, guid: fd5f7c807ca1ea643b0ae501ff889a70, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LeftB:
-        m_Texture: {fileID: 2800000, guid: d349eb2db22ec0746a14ade881ac087f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 90494e0797812be488f2fbe703461966, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LeftTex:
@@ -105,11 +105,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RightA:
-        m_Texture: {fileID: 2800000, guid: f33d9e3a86071394c83b568257570dd5, type: 3}
+        m_Texture: {fileID: 2800000, guid: 14877617607f5fb47af48fcd766426ad, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RightB:
-        m_Texture: {fileID: 2800000, guid: 8c84ddb32342f7a409915f46705fcc5a, type: 3}
+        m_Texture: {fileID: 2800000, guid: f33d9e3a86071394c83b568257570dd5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RightTex:
@@ -117,11 +117,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _UpA:
-        m_Texture: {fileID: 2800000, guid: 3157d3aa6a8bd694e9cc4c05e3303c06, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4e02df907356e0848a5d76021b80192a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _UpB:
-        m_Texture: {fileID: 2800000, guid: 3af6f93d7b7b2b842ae6ac2a4e817fd4, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3157d3aa6a8bd694e9cc4c05e3303c06, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _UpTex:
@@ -130,7 +130,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Blend: 0
+    - _Blend: 0.032825023
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1

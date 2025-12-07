@@ -22,7 +22,7 @@ public class UiRootView : MonoBehaviour
     }
 
 
-    private void AttacheSceneUI(GameObject sceneUI)
+    public void AttacheSceneUI(GameObject sceneUI)
     {
         ClearSceneUI();
         sceneUI.transform.SetParent(uiScreenContainer, false);

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 namespace Assets.angryDad.Scripts.Entry
 {
-    public class GameEntryPoint
+    public class GameEntryPoint: MonoBehaviour
     {
         private static GameEntryPoint instance;
         private Courootins courootins;
@@ -47,6 +47,11 @@ namespace Assets.angryDad.Scripts.Entry
                courootins.StartCoroutine(LoadAndStartLevel());
                 return;
             }
+            if (sceneName == ScenesName.mainMenu)
+            {
+                courootins.StartCoroutine(LoadAndStartMainMenu());
+                return;
+            }
             if (sceneName != ScenesName.boot)
             {
                 return;
@@ -64,6 +69,35 @@ namespace Assets.angryDad.Scripts.Entry
             yield return LoadScene(ScenesName.level0);
 
             yield return new WaitForSeconds(5f);
+
+            var sceneEntryPoint = UnityEngine.Object.FindObjectOfType<GamePlayEntryPoint>();
+            sceneEntryPoint.Run(uiRootView);
+
+            sceneEntryPoint.GoTOMainMenuSceneRequested += () =>
+            {
+                courootins.StartCoroutine(LoadAndStartMainMenu());
+            };
+
+            uiRootView.HideLoadingScreen();
+        }
+
+        private IEnumerator LoadAndStartMainMenu()
+        {
+            uiRootView.ShowLoadingScreen();
+
+            yield return LoadScene(ScenesName.boot);
+            yield return LoadScene(ScenesName.mainMenu);
+
+            yield return new WaitForSeconds(5f);
+
+            var sceneEntryPoint = UnityEngine.Object.FindObjectOfType<MainMenuEntryPoint>();
+            sceneEntryPoint.Run(uiRootView);
+
+
+            sceneEntryPoint.GoTOGameplaySceneRequested += () =>
+            {
+                courootins.StartCoroutine(LoadAndStartLevel());
+            };
 
             uiRootView.HideLoadingScreen();
         }
