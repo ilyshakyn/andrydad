@@ -48,12 +48,12 @@ public class PlayerLocomotion : MonoBehaviour
             moveDirection = moveDirection * walkingSpeed;
 
         Vector3 movementVelocity = moveDirection;
-        movementVelocity.y = playerRigibody.velocity.y;
+        movementVelocity.y = playerRigibody.linearVelocity.y;
 
         if (movementVelocity.y < 0)
             movementVelocity.y *= gravityMultiplier;
 
-        playerRigibody.velocity = movementVelocity;
+        playerRigibody.linearVelocity = movementVelocity;
     }
 
     private void HandleRotation()

@@ -10,11 +10,7 @@ namespace Assets.angryDad.Pogoda.LightingManager_Assets
     public class DayNightToogleWindows: DayNightToggleTarget
     {
         [SerializeField] List<Window> windows;
-        public virtual void Awake()
-        {
-            
-                gameObject.SetActive(initiallyActive);
-        }
+
         public override void EnableObject()
         {
             if (gameObject != null)

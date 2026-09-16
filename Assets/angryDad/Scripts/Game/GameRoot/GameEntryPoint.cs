@@ -19,7 +19,7 @@ namespace Assets.angryDad.Scripts.Entry
         public static void AutoStartGame()
         {
             //системные настройки
-
+            Debug.Log("ILYYYYYYYYY");
             instance = new GameEntryPoint();
             instance.RunGame();
         }
